@@ -4,6 +4,16 @@ import express from 'express';
 
 import routes from './routes';
 
+// Set up mongoose connection
+import mongoose from 'mongoose';
+mongoose.set("strictQuery", false);
+const mongoDB = process.env.MONGODB_URL;
+
+main().catch(err => console.log(err));
+async function main() {
+  await mongoose.connect(mongoDB);
+}
+
 const app = express();
 
 app.use(cors());
