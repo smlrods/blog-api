@@ -1,7 +1,12 @@
 import { Router } from "express";
+import * as commentController from '../controllers/commentController';
 
 const router = Router();
 
-router.get('/', (req, res) => res.send('Comment'));
+// CREATE Comment
+router.post('/', commentController.createComment);
+
+// DELETE comment
+router.delete('/:commentid', commentController.deleteComment);
 
 export default router;
