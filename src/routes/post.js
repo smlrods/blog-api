@@ -22,4 +22,7 @@ router.put('/:postid', postController.updatePost);
 // Get post comments
 router.get('/:postid/comments', commentController.getComments);
 
+// Create post comments
+router.post('/:postid/comments', commentController.createComment);
+
 export default router;
