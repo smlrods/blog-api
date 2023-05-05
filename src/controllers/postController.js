@@ -32,6 +32,7 @@ const createPost = [
       title: req.body.title,
       content: req.body.content,
       timestamp: Date(),
+      author: req.user.id
     });
 
     // Save post to DB
