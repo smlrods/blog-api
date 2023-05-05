@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as postController from '../controllers/postController';
 import * as commentController from '../controllers/commentController';
+import passport from "passport";
 
 const router = Router();
 
@@ -8,16 +9,16 @@ const router = Router();
 router.get('/', postController.getPosts);
 
 // Create a post
-router.post('/', postController.createPost);
+router.post('/', passport.authenticate('jwt', { session: false }), postController.createPost);
 
 // Get a post
 router.get('/:postid', postController.getPost);
 
 // Delete a post
-router.delete('/:postid', postController.deletePost);
+router.delete('/:postid', passport.authenticate('jwt', { session: false }), postController.deletePost);
 
 // Update a post
-router.put('/:postid', postController.updatePost);
+router.put('/:postid', passport.authenticate('jwt', { session: false }), postController.updatePost);
 
 // Get post comments
 router.get('/:postid/comments', commentController.getComments);
