@@ -64,12 +64,28 @@ const createPost = [
 
 // GET METHOD
 const getPost = asyncHandler(async (req, res) => {
+  const tokenExtractor = ExtractJwt.fromAuthHeaderAsBearerToken();
+  const token = tokenExtractor(req);
+
   const post = await Post.findById(req.params.postid).exec();
 
   // Post not found
   if (!post) return res.sendStatus(404);
 
-  res.json(post);
+  if (post.published) {
+    return res.json(post);
+  }
+
+  // verify the token
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.sendStatus(401);
+    }
+
+    // if the token is valid
+    const posts = await Post.find().exec();
+    res.json(post);
+  })
 });
 
 // DELETE METHOD
