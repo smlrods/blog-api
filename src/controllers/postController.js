@@ -69,6 +69,10 @@ const updatePost = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
+  body("published", "Published must be a boolean")
+    .trim()
+    .isBoolean()
+    .escape(),
   asyncHandler(async (req, res) => {
     // Extract the validation errors from a request
     const errors = validationResult(req);
@@ -84,6 +88,7 @@ const updatePost = [
     const editedpost = new Post({
       title: req.body.title,
       content: req.body.content,
+      published: req.body.published,
       _id: req.params.postid
     });
 
