@@ -50,6 +50,7 @@ const createPost = [
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
+      published: req.body.published,
       timestamp: Date(),
       author: req.user.id
     });
