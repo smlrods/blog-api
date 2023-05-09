@@ -1,13 +1,32 @@
 import models from '../models';
 import { body, validationResult } from 'express-validator';
 import asyncHandler from 'express-async-handler';
+import jwt from "jsonwebtoken";
+import 'dotenv/config';
+import { ExtractJwt } from 'passport-jwt';
 
 const Post = models.Post;
 
 // GET METHOD
 const getPosts = async (req, res) => {
-  const posts = await Post.find().exec();
-  res.json(posts);
+  const tokenExtractor = ExtractJwt.fromAuthHeaderAsBearerToken();
+  const token = tokenExtractor(req);
+
+  if (!token) {
+    const posts = await Post.find({ published: true }, "-published").exec();
+    return res.json(posts);
+  }
+
+  // verify the token
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.sendStatus(401);
+    }
+
+    // if the token is valid
+    const posts = await Post.find().exec();
+    res.json(posts);
+  })
 };
 
 // POST METHOD
